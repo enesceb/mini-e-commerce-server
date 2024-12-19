@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "1likte.API", "1likte.API\1likte.API.csproj", "{58DF01BE-C767-44E9-B9A0-5A2B0DEB869E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "1likte.Data", "1likte.Data\1likte.Data.csproj", "{8F7FF055-ADD6-4853-BDF1-6CDFACA10E8D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "1likte.Core", "1likte.Core\1likte.Core.csproj", "{C0D7D21D-6D25-4112-8F7D-01FC4D8E7E62}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "1likte.Model", "1likte.Model\1likte.Model.csproj", "{D56F7F21-E321-4F41-8573-91BE44D79ACE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{58DF01BE-C767-44E9-B9A0-5A2B0DEB869E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58DF01BE-C767-44E9-B9A0-5A2B0DEB869E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58DF01BE-C767-44E9-B9A0-5A2B0DEB869E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58DF01BE-C767-44E9-B9A0-5A2B0DEB869E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F7FF055-ADD6-4853-BDF1-6CDFACA10E8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F7FF055-ADD6-4853-BDF1-6CDFACA10E8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F7FF055-ADD6-4853-BDF1-6CDFACA10E8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F7FF055-ADD6-4853-BDF1-6CDFACA10E8D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0D7D21D-6D25-4112-8F7D-01FC4D8E7E62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0D7D21D-6D25-4112-8F7D-01FC4D8E7E62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0D7D21D-6D25-4112-8F7D-01FC4D8E7E62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0D7D21D-6D25-4112-8F7D-01FC4D8E7E62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D56F7F21-E321-4F41-8573-91BE44D79ACE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D56F7F21-E321-4F41-8573-91BE44D79ACE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D56F7F21-E321-4F41-8573-91BE44D79ACE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D56F7F21-E321-4F41-8573-91BE44D79ACE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

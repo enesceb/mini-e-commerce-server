@@ -15,6 +15,8 @@
   <ItemGroup>
     <ProjectReference Include="..\1likte.Core\1likte.Core.csproj" />
     <ProjectReference Include="..\1likte.Model\1likte.Model.csproj" />
+    <ProjectReference Include="..\1likte.Data\1likte.Data.csproj" />
+
   </ItemGroup>
 
 </Project>

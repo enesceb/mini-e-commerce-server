@@ -1,11 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using _1likte.API.Configurations;
 using _1likte.Core.Services;
-using _1likte.Model.DbModels;
-using _1likte.Model.ViewModels;
 using _1likte.Model.ViewModels.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

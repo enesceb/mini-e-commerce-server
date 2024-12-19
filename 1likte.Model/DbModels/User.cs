@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace _1likte.Model.DbModels
 {
-    public class User
+    public class User : Base
     {
-        public int Id { get; set; }
      
         [Required]
         [MaxLength(50)]

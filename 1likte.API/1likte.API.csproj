@@ -10,11 +10,12 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.6" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.4" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\1likte.Core\1likte.Core.csproj" />
-    <ProjectReference Include="..\1likte.Model\1likte.Model.csproj" />
     <ProjectReference Include="..\1likte.Data\1likte.Data.csproj" />
 
   </ItemGroup>

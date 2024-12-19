@@ -1,9 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <ProjectReference Include="..\1likte.Data\1likte.Data.csproj" />
     <ProjectReference Include="..\1likte.Model\1likte.Model.csproj" />
   </ItemGroup>
 
+
+ <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.2" />
+  </ItemGroup>
+  
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>_1likte.Core</RootNamespace>

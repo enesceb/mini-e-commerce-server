@@ -3,6 +3,8 @@ using _1likte.Model.DbModels;
 using _1likte.Data;
 using Microsoft.EntityFrameworkCore;
 using _1likte.Model.ViewModels;
+using AutoMapper;
+using _1likte.Model.ViewModels.User;
 
 
 
@@ -12,48 +14,34 @@ namespace _1likte.Core.Concrete
     public class UserService : IUserService
     {
         private readonly ApplicationDbContext _dbContext;
-
-        public UserService(ApplicationDbContext dbContext)
+        private readonly IMapper _mapper;
+        public UserService(ApplicationDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
+            _mapper = mapper;
         }
 
-        LoginResponseModel IUserService.Login(LoginRequest loginRequest)
+        public async Task<User> GetUserById(int id)
         {
-            // Örnek kullanıcı verileri (mock veri)
-            var users = new List<LoginResponseModel>
-              {
-                  new LoginResponseModel
-                  {
-                      UserId = 1,
-                      Email = "test@example.com",
-                      FullName = "John Doe",
-                  },
-                  new LoginResponseModel
-                  {
-                      UserId = 2,
-                      Email = "jane@example.com",
-                      FullName = "Jane Doe",
-                  }
-              };
+            if (id <= 0) throw new ArgumentException("Invalid user ID.");
 
-            // Kullanıcıyı e-posta ile bul
-            var user = users.FirstOrDefault(u => u.Email == loginRequest.Email);
+            var user = await _dbContext.Users.FindAsync(id);
+            if (user == null) throw new KeyNotFoundException("User not found.");
 
-            if (user == null)
-                return null;
+            return user;
+        }
 
-            // Şifre kontrolü (şifre hashleme ile geliştirilmesi önerilir)
-            if (user.Email != loginRequest.Password)
-                return null;
-
-            // Kullanıcı doğrulandıysa döndür
-            return new LoginResponseModel
+        public async Task<IEnumerable<User>> GetAllUsersAsync()
+        {
+            try
             {
-                UserId = user.UserId,
-                Email = user.Email,
-                FullName = user.FullName
-            };
+                var users = await _dbContext.Users.ToListAsync();
+                return _mapper.Map<IEnumerable<User>>(users);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Kullanıcılar alınırken bir hata oluştu: {ex.Message}");
+            }
         }
         public async Task<User> RegisterUser(User user)
         {
@@ -69,17 +57,9 @@ namespace _1likte.Core.Concrete
             return user;
         }
 
-        public async Task<User> GetUserById(int id)
-        {
-            if (id <= 0) throw new ArgumentException("Invalid user ID.");
 
-            var user = await _dbContext.Users.FindAsync(id);
-            if (user == null) throw new KeyNotFoundException("User not found.");
 
-            return user;
-        }
-
-        public async Task<User> UpdateUser(User user)
+        public async Task<User> UpdateUser(UserUpdateModel user)
         {
             if (user == null) throw new ArgumentNullException(nameof(user));
 
@@ -92,7 +72,7 @@ namespace _1likte.Core.Concrete
                     throw new InvalidOperationException("The email is already in use.");
             }
 
-            existingUser.Name = user.Name ?? existingUser.Name;
+            existingUser.FullName = user.FullName ?? existingUser.FullName;
             existingUser.Email = user.Email ?? existingUser.Email;
 
             _dbContext.Users.Update(existingUser);

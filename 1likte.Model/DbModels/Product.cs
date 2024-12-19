@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 
 namespace _1likte.Model.DbModels
 {
-    public class Product
+    public class Product : Base
     {
-        public int Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public string ImageUrl { get; set; }

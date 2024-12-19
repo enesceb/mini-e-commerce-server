@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 
 namespace _1likte.Model.DbModels
 {
-    public class Basket
+    public class Basket : Base
     {
-        public int Id { get; set; }
         public int UserId { get; set; }
         public User User { get; set; }
         public List<BasketItem> Items { get; set; } = new List<BasketItem>();

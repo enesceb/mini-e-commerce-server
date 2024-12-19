@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 
 namespace _1likte.Model.DbModels
 {
-    public class Category
+    public class Category : Base
     {
-        public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
     }

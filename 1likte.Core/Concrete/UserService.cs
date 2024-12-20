@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using _1likte.Model.ViewModels;
 using AutoMapper;
 using _1likte.Model.ViewModels.User;
+using _1likte.Model.ViewModels.Common.MachineGo.Model.ViewModel;
 
 
 
@@ -21,23 +22,26 @@ namespace _1likte.Core.Concrete
             _mapper = mapper;
         }
 
-        public async Task<UserResponseModel> GetUserById(int id)
+        public async Task<ValidatedModel<UserResponseModel>> GetUserById(int id)
         {
             if (id <= 0) throw new ArgumentException("Geçersiz kullanıcı kimliği.");
 
             var user = await _dbContext.Users.FindAsync(id);
             if (user == null) throw new KeyNotFoundException("Kullanıcı bulunamadı.");
 
-            var userResponse =  _mapper.Map<UserResponseModel>(user);
-            return userResponse;
+            var map =  _mapper.Map<UserResponseModel>(user);
+            var response = new ValidatedModel<UserResponseModel>(map);
+            return response;
         }
 
-        public async Task<IEnumerable<UserResponseModel>> GetAllUsersAsync()
+        public async Task<ValidatedModel<IEnumerable<UserResponseModel>>> GetAllUsersAsync()
         {
             try
             {
                 var users = await _dbContext.Users.ToListAsync();
-                return _mapper.Map<IEnumerable<UserResponseModel>>(users);
+                var map = _mapper.Map<IEnumerable<UserResponseModel>>(users);
+                var response = new ValidatedModel<IEnumerable<UserResponseModel>>(map);
+                return response;
             }
             catch (Exception ex)
             {
@@ -45,7 +49,7 @@ namespace _1likte.Core.Concrete
             }
         }
        
-        public async Task<UserResponseModel> UpdateUser(UserUpdateModel user)
+        public async Task<ValidatedModel<UserResponseModel>> UpdateUser(UserUpdateModel user)
         {
             if (user == null) throw new ArgumentNullException(nameof(user));
 
@@ -66,11 +70,9 @@ namespace _1likte.Core.Concrete
 
             _dbContext.Users.Update(existingUser);
             await _dbContext.SaveChangesAsync();
-            var response = _mapper.Map<UserResponseModel>(existingUser);
+            var map = _mapper.Map<UserResponseModel>(existingUser);
+            var response = new ValidatedModel<UserResponseModel>(map);
             return response;
         }
-
-
-
     }
 }

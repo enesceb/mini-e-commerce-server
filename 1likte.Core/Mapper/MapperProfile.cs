@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using _1likte.Model.DbModels;
 using _1likte.Model.ViewModels;
+using _1likte.Model.ViewModels.Product;
 using _1likte.Model.ViewModels.User;
 using AutoMapper;
 
@@ -20,6 +21,12 @@ namespace _1likte.Core.Mapper
 
     
             CreateMap<Token, TokenModel>();
+
+            CreateMap<UserLoginRequestModel, UserLoginResponseModel>();
+            CreateMap<UserLoginResponseModel, UserLoginRequestModel>();
+
+            CreateMap<Product, CreateProductRequestModel>();
+            CreateMap<CreateProductRequestModel, Product>();
         }
     }
 }

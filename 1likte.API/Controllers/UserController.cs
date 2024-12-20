@@ -37,7 +37,7 @@ namespace _1likte.API.Controllers
             {
 
                 var user = await _userService.GetUserById(id);
-                if (user == null) return NotFound();
+                if (user.Data == null) return NotFound();
                 return Ok(user);
             }
             catch (UnauthorizedAccessException ex)

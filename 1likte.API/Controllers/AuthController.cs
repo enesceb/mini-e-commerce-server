@@ -24,7 +24,6 @@ namespace _1likte.API.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-
             try
             {
                 var response = await _authService.AuthenticateAsync(loginDto);
@@ -36,10 +35,8 @@ namespace _1likte.API.Controllers
                     Expires = response.AccessTokenExpiration
                 });
 
-                // Header'a token ekle
                 HttpContext.Response.Headers["X-Access-Token"] = response.AccessToken;
-
-                // Başarılı yanıt dön
+              
                 return Ok(new
                 {
                     Message = "Giriş başarılı!",

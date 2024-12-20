@@ -21,63 +21,53 @@ namespace _1likte.Core.Concrete
             _mapper = mapper;
         }
 
-        public async Task<User> GetUserById(int id)
+        public async Task<UserResponseModel> GetUserById(int id)
         {
-            if (id <= 0) throw new ArgumentException("Invalid user ID.");
+            if (id <= 0) throw new ArgumentException("Geçersiz kullanıcı kimliği.");
 
             var user = await _dbContext.Users.FindAsync(id);
-            if (user == null) throw new KeyNotFoundException("User not found.");
+            if (user == null) throw new KeyNotFoundException("Kullanıcı bulunamadı.");
 
-            return user;
+            var userResponse =  _mapper.Map<UserResponseModel>(user);
+            return userResponse;
         }
 
-        public async Task<IEnumerable<User>> GetAllUsersAsync()
+        public async Task<IEnumerable<UserResponseModel>> GetAllUsersAsync()
         {
             try
             {
                 var users = await _dbContext.Users.ToListAsync();
-                return _mapper.Map<IEnumerable<User>>(users);
+                return _mapper.Map<IEnumerable<UserResponseModel>>(users);
             }
             catch (Exception ex)
             {
                 throw new Exception($"Kullanıcılar alınırken bir hata oluştu: {ex.Message}");
             }
         }
-        public async Task<User> RegisterUser(User user)
-        {
-            // Null kontrolü
-            if (user == null) throw new ArgumentNullException(nameof(user));
-
-            // Email kontrolü
-            if (await _dbContext.Users.AnyAsync(u => u.Email == user.Email))
-                throw new InvalidOperationException("The email is already in use.");
-
-            await _dbContext.Users.AddAsync(user);
-            await _dbContext.SaveChangesAsync();
-            return user;
-        }
-
-
-
-        public async Task<User> UpdateUser(UserUpdateModel user)
+       
+        public async Task<UserResponseModel> UpdateUser(UserUpdateModel user)
         {
             if (user == null) throw new ArgumentNullException(nameof(user));
 
             var existingUser = await _dbContext.Users.FindAsync(user.Id);
-            if (existingUser == null) throw new KeyNotFoundException("User not found.");
+            if (existingUser == null) throw new KeyNotFoundException("Kullanıcı bulunamadı.");
 
             if (!string.IsNullOrEmpty(user.Email) && user.Email != existingUser.Email)
             {
                 if (await _dbContext.Users.AnyAsync(u => u.Email == user.Email))
-                    throw new InvalidOperationException("The email is already in use.");
+                    throw new InvalidOperationException("Bu email zaten kullanılıyor.");
             }
 
             existingUser.FullName = user.FullName ?? existingUser.FullName;
             existingUser.Email = user.Email ?? existingUser.Email;
+            existingUser.UpdatedAt = DateTime.UtcNow;
+            existingUser.UpdatedBy = user.Id;
+
 
             _dbContext.Users.Update(existingUser);
             await _dbContext.SaveChangesAsync();
-            return existingUser;
+            var response = _mapper.Map<UserResponseModel>(existingUser);
+            return response;
         }
 
 

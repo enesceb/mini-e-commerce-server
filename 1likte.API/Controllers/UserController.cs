@@ -15,16 +15,6 @@ namespace _1likte.API.Controllers
         {
             _userService = userService;
         }
-
-        [HttpGet("{id}")]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetUserDetail(int id)
-        {
-            var user = await _userService.GetUserById(id);
-            if (user == null) return NotFound();
-            return Ok(user);
-        }
-
         [HttpGet]
         public async Task<IActionResult> GetAllUsers()
         {
@@ -39,12 +29,40 @@ namespace _1likte.API.Controllers
             }
         }
 
+        [HttpGet("{id:int}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetUserDetail(int id)
+        {
+            try
+            {
+
+                var user = await _userService.GetUserById(id);
+                if (user == null) return NotFound();
+                return Ok(user);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Bir hata oluştu", details = ex.Message });
+            }
+        }
+
         [HttpPost("update")]
         [Authorize]
         public async Task<IActionResult> Update([FromBody] UserUpdateModel user)
         {
-            var createdUser = await _userService.UpdateUser(user);
-            return Ok(createdUser);
+            try
+            {
+                var updatedUser = await _userService.UpdateUser(user);
+                return Ok(updatedUser);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status404NotFound, new { message = "Bir hata oluştu", details = ex.Message });
+            }
         }
 
     }

@@ -10,9 +10,8 @@ namespace _1likte.Core.Services
 {
     public interface IUserService
     {
-        Task<IEnumerable<User>> GetAllUsersAsync();
-        Task<User> RegisterUser(User user);
-        Task<User> GetUserById(int id);
-        Task<User> UpdateUser(UserUpdateModel user);
+        Task<IEnumerable<UserResponseModel>> GetAllUsersAsync();
+        Task<UserResponseModel> GetUserById(int id);
+        Task<UserResponseModel> UpdateUser(UserUpdateModel user);
     }
 }

@@ -8,8 +8,8 @@ namespace _1likte.Core.Services
 {
     public interface IAuthenticationService
     {
-        Task<TokenModel> AuthenticateAsync(UserLoginRequestModel login);
-        Task<TokenModel> RegisterAsync(UserRegisterRequestModel createUser);
+        Task<UserLoginResponseModel> AuthenticateAsync(UserLoginRequestModel login);
+        Task<UserLoginResponseModel> RegisterAsync(UserRegisterRequestModel createUser);
 
         Task<bool> RevokeRefreshTokenAsync(string refreshToken);
 

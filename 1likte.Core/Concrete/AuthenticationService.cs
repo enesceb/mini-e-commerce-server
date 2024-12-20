@@ -18,7 +18,7 @@ namespace _1likte.Core.Concrete
             _tokenService = tokenService;
         }
 
-        public async Task<TokenModel> AuthenticateAsync(UserLoginRequestModel loginDto)
+        public async Task<UserLoginResponseModel> AuthenticateAsync(UserLoginRequestModel loginDto)
         {
             try
             {
@@ -57,7 +57,16 @@ namespace _1likte.Core.Concrete
 
                 await _context.SaveChangesAsync();
 
-                return token;
+                var response = new UserLoginResponseModel {
+                    UserId = user.Id,
+                    FullName = user.FullName,
+                    Email = user.Email,
+                    ProfilePhotoUrl = user.ProfilePhotoUrl,
+                    AccessToken = token.AccessToken,
+                    AccessTokenExpiration = token.AccessTokenExpiration,
+                };
+
+                return response;
             }
             catch (UnauthorizedAccessException ex)
             {
@@ -71,14 +80,14 @@ namespace _1likte.Core.Concrete
             }
         }
 
-        public async Task<TokenModel> RegisterAsync(UserRegisterRequestModel registerDto)
+        public async Task<UserLoginResponseModel> RegisterAsync(UserRegisterRequestModel registerDto)
         {
             try
             {
                 var isUserExist = await _context.Users.AnyAsync(u => u.Email == registerDto.Email);
                 if (isUserExist)
                 {
-                    throw new UnauthorizedAccessException("Bu e-posta adresi kayıt olmak için kullanılamaz!");
+                    throw new UnauthorizedAccessException("Bu e-posta adresi kullanılıyor!");
                 }
                 var passwordHasher = new PasswordHasher<User>();
 
@@ -87,7 +96,8 @@ namespace _1likte.Core.Concrete
                 {
                     Email = registerDto.Email,
                     PasswordHash = passwordHasher.HashPassword(null, registerDto.Password),
-                    FullName = registerDto.FirstName,
+                    FullName = registerDto.FullName,
+                    ProfilePhotoUrl = ""
                 };
                 await _context.Users.AddAsync(user);
                 await _context.SaveChangesAsync();
@@ -105,7 +115,16 @@ namespace _1likte.Core.Concrete
                 });
                 await _context.SaveChangesAsync();
 
-                return token;
+                 var response = new UserLoginResponseModel {
+                    UserId = user.Id,
+                    FullName = user.FullName,
+                    Email = user.Email,
+                    ProfilePhotoUrl = user.ProfilePhotoUrl,
+                    AccessToken = token.AccessToken,
+                    AccessTokenExpiration = token.AccessTokenExpiration,
+                };
+
+                return response;
             }
             catch (Exception ex)
             {

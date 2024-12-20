@@ -21,11 +21,12 @@ builder.Services.AddCoreServices();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddHttpClient();
 builder.Services.AddAutoMapper(typeof(MapperProfile));
+
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "1likte mini-e-commerce API",
+        Title = "1likte API",
         Version = "v1",
     });
 
@@ -90,6 +91,7 @@ builder.Services.AddAuthentication(options =>
         ValidateLifetime = true,
     };
 });
+builder.Services.Configure<CustomTokenOption>(builder.Configuration.GetSection("TokenOption"));
 
 var app = builder.Build();
 
@@ -100,7 +102,7 @@ app.UseSwagger();
 app.UseSwaggerUI();
 app.UseHttpsRedirection();
 app.UseCors("CORSPolicy");
-app.UseAuthorization();
 app.MapControllers();
 app.UseAuthentication();
+app.UseAuthorization();
 app.Run();

@@ -27,8 +27,27 @@ namespace _1likte.API.Controllers
 
             try
             {
-                var token = await _authService.AuthenticateAsync(loginDto);
-                return Ok(token);
+                var response = await _authService.AuthenticateAsync(loginDto);
+                HttpContext.Response.Cookies.Append("access-token", response.AccessToken, new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.Strict,
+                    Expires = response.AccessTokenExpiration
+                });
+
+                // Header'a token ekle
+                HttpContext.Response.Headers["X-Access-Token"] = response.AccessToken;
+
+                // Başarılı yanıt dön
+                return Ok(new
+                {
+                    Message = "Giriş başarılı!",
+                    UserId = response.UserId,
+                    FullName = response.FullName,
+                    ProfilePhotoUrl = response.ProfilePhotoUrl,
+                    Email = response.Email,
+                });
             }
             catch (UnauthorizedAccessException ex)
             {
@@ -47,8 +66,27 @@ namespace _1likte.API.Controllers
                 return BadRequest(ModelState);
             try
             {
-                var token = await _authService.RegisterAsync(createUserDto);
-                return Ok(token);
+                var response = await _authService.RegisterAsync(createUserDto);
+                 HttpContext.Response.Cookies.Append("access-token", response.AccessToken, new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.Strict,
+                    Expires = response.AccessTokenExpiration
+                });
+
+                // Header'a token ekle
+                HttpContext.Response.Headers["X-Access-Token"] = response.AccessToken;
+
+                // Başarılı yanıt dön
+                return Ok(new
+                {
+                    Message = "Kayıt Başarılı!",
+                    UserId = response.UserId,
+                    FullName = response.FullName,
+                    ProfilePhotoUrl = response.ProfilePhotoUrl,
+                    Email = response.Email,
+                });
             }
             catch (UnauthorizedAccessException ex)
             {

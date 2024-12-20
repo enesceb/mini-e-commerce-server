@@ -45,7 +45,7 @@ namespace TaskManagementSystemBackend.API.Middlewares
                                 return;
                             }
                         }
-                        var userId = int.Parse(jwtToken.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub)?.Value);
+                        var userId = int.Parse(jwtToken.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.NameId)?.Value);
                         context.Items["UserId"] = userId;
                     }
                 }

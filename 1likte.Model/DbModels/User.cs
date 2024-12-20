@@ -6,23 +6,23 @@ using System.Threading.Tasks;
 
 namespace _1likte.Model.DbModels
 {
-    public class User : Base
-    {
-     
-        [Required]
-        [MaxLength(50)]
-        public string FullName { get; set; }
+        public class User : Base
+        {
+        
+            [Required]
+            [MaxLength(50)]
+            public string FullName { get; set; }
 
-        [Required]
-        [EmailAddress]
-        [MaxLength(100)]
-        public string Email { get; set; }
+            [Required]
+            [EmailAddress]
+            [MaxLength(100)]
+            public string Email { get; set; }
 
-        [Required]
-        [MaxLength(255)]
-        public string PasswordHash { get; set; }
+            [Required]
+            [MaxLength(255)]
+            public string PasswordHash { get; set; }
 
 
-        public string ProfilePhotoUrl { get; set; }
-    }
+            public string ProfilePhotoUrl { get; set; }
+        }
 }

@@ -38,7 +38,8 @@ namespace _1likte.Core.Concrete
             {
             new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString()),
             new Claim(JwtRegisteredClaimNames.Email, user.Email),
-            new Claim(JwtRegisteredClaimNames.Name, user.FullName)
+            new Claim(JwtRegisteredClaimNames.Name, user.FullName),
+            new Claim(JwtRegisteredClaimNames.Aud, _tokenOption.Audience[0]),
         };
             return claims;
         }
@@ -46,8 +47,8 @@ namespace _1likte.Core.Concrete
 
         public TokenModel GenerateToken(User user)
         {
-            var accessTokenExpiration = DateTime.Now.AddMinutes(_tokenOption.AccessTokenExpiration);
-            var refreshTokenExpiration = DateTime.Now.AddMinutes(_tokenOption.RefreshTokenExpiration);
+            var accessTokenExpiration = DateTime.UtcNow.AddMinutes(_tokenOption.AccessTokenExpiration);
+            var refreshTokenExpiration = DateTime.UtcNow.AddMinutes(_tokenOption.RefreshTokenExpiration);
 
             var securityKey = SignService.GetSymmetricSecurityKey(_tokenOption.SecurityKey);
 
@@ -55,8 +56,9 @@ namespace _1likte.Core.Concrete
 
             JwtSecurityToken jwtSecurityToken = new JwtSecurityToken(
                     issuer: _tokenOption.Issuer,
+                    audience: _tokenOption.Audience[0],
                     expires: accessTokenExpiration,
-                    notBefore: DateTime.Now,
+                    notBefore: DateTime.UtcNow,
                     claims: GetClaims(user),
                     signingCredentials: signingCredentials
                 );

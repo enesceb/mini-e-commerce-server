@@ -7,7 +7,6 @@ namespace _1likte.Model.ViewModels
 {
     public class UserLoginRequestModel
     {
-        public int Id { get; set;}
         public string Email { get; set; }
         public string Password { get; set; }
     }

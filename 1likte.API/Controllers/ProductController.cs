@@ -6,6 +6,7 @@ using _1likte.Core.Services;
 using _1likte.Model.DbModels;
 using _1likte.Model.ViewModels.Product;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace _1likte.API.Controllers
 {
@@ -22,6 +23,12 @@ namespace _1likte.API.Controllers
 
         // Create Product
         [HttpPost]
+        [SwaggerOperation(
+            Summary = "Yeni bir ürün oluşturur",
+            Description = "Bu işlem, verilen ürün detaylarıyla yeni bir ürün oluşturur. Başarıyla oluşturulan ürünün bilgileri döndürülür.",
+            OperationId = "CreateProduct",
+            Tags = new[] { "Ürün Yönetimi" }
+        )]
         public async Task<IActionResult> CreateProduct([FromBody] CreateProductRequestModel product)
         {
             var result = await _productService.CreateProductAsync(product);
@@ -33,6 +40,12 @@ namespace _1likte.API.Controllers
 
         // Get Product by Id
         [HttpGet("{id}")]
+        [SwaggerOperation(
+            Summary = "ID'ye göre ürünü getirir",
+            Description = "Bu işlem, verilen ürün ID'sine göre ürünü getirir. Eğer ürün bulunamazsa, 404 Not Found hatası döner.",
+            OperationId = "GetProductById",
+            Tags = new[] { "Ürün Yönetimi" }
+        )]
         public async Task<IActionResult> GetProductById(int id)
         {
             var result = await _productService.GetProductByIdAsync(id);
@@ -44,6 +57,12 @@ namespace _1likte.API.Controllers
 
         // Get All Products
         [HttpGet]
+        [SwaggerOperation(
+            Summary = "Tüm ürünleri getirir",
+            Description = "Bu işlem, tüm ürünlerin listesini getirir. Eğer ürün bulunmazsa, 404 Not Found hatası dönebilir.",
+            OperationId = "GetAllProducts",
+            Tags = new[] { "Ürün Yönetimi" }
+        )]
         public async Task<IActionResult> GetAllProducts()
         {
             var result = await _productService.GetAllProductsAsync();
@@ -52,6 +71,12 @@ namespace _1likte.API.Controllers
 
         // Update Product
         [HttpPut("{id}")]
+        [SwaggerOperation(
+            Summary = "Ürünü günceller",
+            Description = "Bu işlem, verilen ürün ID'sine göre ürünü günceller. Eğer ID uyuşmazsa, 400 Bad Request hatası döner.",
+            OperationId = "UpdateProduct",
+            Tags = new[] { "Ürün Yönetimi" }
+        )]
         public async Task<IActionResult> UpdateProduct(int id, [FromBody] UpdateProductRequestModel product)
         {
             if (id != product.Id)
@@ -66,6 +91,12 @@ namespace _1likte.API.Controllers
 
         // Delete Product
         [HttpDelete("{id}")]
+        [SwaggerOperation(
+            Summary = "Ürünü siler",
+            Description = "Bu işlem, verilen ürün ID'sine sahip ürünü siler. Başarıyla silindiyse, 204 No Content döner.",
+            OperationId = "DeleteProduct",
+            Tags = new[] { "Ürün Yönetimi" }
+        )]
         public async Task<IActionResult> DeleteProduct(int id)
         {
             var result = await _productService.DeleteProductAsync(id);
@@ -75,5 +106,4 @@ namespace _1likte.API.Controllers
             return NoContent(); // Successfully deleted
         }
     }
-
 }

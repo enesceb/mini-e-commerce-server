@@ -23,7 +23,7 @@ builder.Services.AddAutoMapper(typeof(MapperProfile));
 
 builder.Services.AddSwaggerGen(options =>
 {
-    
+    options.EnableAnnotations(); 
     options.SwaggerDoc("v1", new OpenApiInfo
     {
         Title = "1likte API",

@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Swashbuckle.AspNetCore.Annotations;
 
-
 namespace _1likte.API.Controllers
 {
     [ApiController]
@@ -26,6 +25,12 @@ namespace _1likte.API.Controllers
         // Create Category
         [HttpPost]
         [Authorize(Roles = "Admin")]
+        [SwaggerOperation(
+            Summary = "Yeni bir kategori oluşturur",
+            Description = "Bu işlem, Admin rolüne sahip bir kullanıcı tarafından yapılabilir. Kategori verisi, istek gövdesinde sağlanan kategori bilgileri ile oluşturulur. Başarılı bir işlemde, oluşturulan kategorinin bilgileri ve oluşturulma zamanı geri döndürülür.",
+            OperationId = "CreateCategory",
+            Tags = new[] { "Kategori Yönetimi" }
+        )]
         public async Task<IActionResult> CreateCategory([FromBody] Category category)
         {
             var result = await _categoryService.CreateCategoryAsync(category);
@@ -38,6 +43,12 @@ namespace _1likte.API.Controllers
         // Get Category by Id
         [HttpGet("{id}")]
         [AllowAnonymous]
+        [SwaggerOperation(
+            Summary = "Kategori ID'sine göre bir kategori getirir",
+            Description = "Verilen kategori ID'sine sahip kategori bilgilerini getirir. Eğer kategori bulunamazsa, 404 Not Found hatası döner.",
+            OperationId = "GetCategoryById",
+            Tags = new[] { "Kategori Yönetimi" }
+        )]
         public async Task<IActionResult> GetCategoryById(int id)
         {
             var result = await _categoryService.GetCategoryByIdAsync(id);
@@ -50,6 +61,12 @@ namespace _1likte.API.Controllers
         // Get All Categories
         [HttpGet]
         [AllowAnonymous]
+        [SwaggerOperation(
+            Summary = "Tüm kategorileri listeler",
+            Description = "Bu işlem, tüm kategorilerin bir listesini döndürür. Herhangi bir kimlik doğrulama gerektirmez ve anonim kullanıcılar tarafından erişilebilir.",
+            OperationId = "GetAllCategories",
+            Tags = new[] { "Kategori Yönetimi" }
+        )]
         public async Task<IActionResult> GetAllCategories()
         {
             var result = await _categoryService.GetAllCategoriesAsync();
@@ -59,11 +76,16 @@ namespace _1likte.API.Controllers
         // Update Category
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
-        [SwaggerOperation(Summary = "Update Category by ID")]
+        [SwaggerOperation(
+            Summary = "Mevcut bir kategoriyi günceller",
+            Description = "Bu işlem, Admin rolüne sahip bir kullanıcı tarafından yapılabilir. Kategori ID'si ile birlikte güncellenmiş kategori verileri sağlanmalıdır. Kategori ID'si sağlanan kategori verisi ile uyumsuzsa, 400 Bad Request hatası döner.",
+            OperationId = "UpdateCategory",
+            Tags = new[] { "Kategori Yönetimi" }
+        )]
         public async Task<IActionResult> UpdateCategory(int id, [FromBody] Category category)
         {
             if (id != category.Id)
-                return BadRequest("Category ID mismatch.");
+                return BadRequest("Kategori ID uyuşmazlığı.");
 
             var result = await _categoryService.UpdateCategoryAsync(category);
             if (!result.Success)
@@ -75,14 +97,19 @@ namespace _1likte.API.Controllers
         // Delete Category
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
+        [SwaggerOperation(
+            Summary = "Bir kategoriyi siler",
+            Description = "Bu işlem, Admin rolüne sahip bir kullanıcı tarafından yapılabilir. Silme işlemi başarılı olursa, hiçbir içerik döndürülmeden 204 No Content yanıtı verilir. Eğer kategori bulunamazsa, 400 Bad Request hatası döner.",
+            OperationId = "DeleteCategory",
+            Tags = new[] { "Kategori Yönetimi" }
+        )]
         public async Task<IActionResult> DeleteCategory(int id)
         {
             var result = await _categoryService.DeleteCategoryAsync(id);
             if (!result.Success)
                 return BadRequest(result.Error);
 
-            return NoContent(); // Successfully deleted
+            return NoContent(); // Başarıyla silindi
         }
     }
-
 }

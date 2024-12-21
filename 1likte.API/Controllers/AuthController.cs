@@ -1,11 +1,10 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using _1likte.Core.Services;
 using _1likte.Model.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace _1likte.API.Controllers
 {
@@ -20,8 +19,15 @@ namespace _1likte.API.Controllers
             _authService = authService;
         }
 
+        // User Login
         [HttpPost("login")]
         [AllowAnonymous]
+        [SwaggerOperation(
+            Summary = "Kullanıcı Girişi",
+            Description = "Bu işlem, kullanıcıyı sisteme giriş yapmasını sağlar. Başarılı girişte, erişim token'ı döner.",
+            OperationId = "Login",
+            Tags = new[] { "Kimlik Doğrulama" }
+        )]
         public async Task<IActionResult> Login([FromBody] UserLoginRequestModel loginDto)
         {
             if (!ModelState.IsValid)
@@ -58,9 +64,15 @@ namespace _1likte.API.Controllers
             }
         }
 
+        // User Registration
         [HttpPost("register")]
         [AllowAnonymous]
-
+        [SwaggerOperation(
+            Summary = "Kullanıcı Kayıt",
+            Description = "Bu işlem, kullanıcı kaydını gerçekleştirir. Başarılı kayıtta, erişim token'ı döner.",
+            OperationId = "Register",
+            Tags = new[] { "Kimlik Doğrulama" }
+        )]
         public async Task<IActionResult> Register([FromBody] UserRegisterRequestModel createUserDto)
         {
             if (!ModelState.IsValid)
@@ -76,10 +88,8 @@ namespace _1likte.API.Controllers
                     Expires = response.AccessTokenExpiration
                 });
 
-                // Header'a token ekle
                 HttpContext.Response.Headers["X-Access-Token"] = response.AccessToken;
 
-                // Başarılı yanıt dön
                 return Ok(new
                 {
                     Message = "Kayıt Başarılı!",
@@ -99,8 +109,15 @@ namespace _1likte.API.Controllers
             }
         }
 
+        // Refresh Token
         [HttpPost("refresh")]
-       [Authorize(Roles ="Admin , User")] 
+        [Authorize(Roles = "Admin, User")]
+        [SwaggerOperation(
+            Summary = "Erişim Token'ını Yenile",
+            Description = "Bu işlem, geçerli refresh token ile yeni bir erişim token'ı oluşturur.",
+            OperationId = "RefreshToken",
+            Tags = new[] { "Kimlik Doğrulama" }
+        )]
         public async Task<IActionResult> RefreshToken([FromBody] string refreshToken)
         {
             if (string.IsNullOrWhiteSpace(refreshToken))
@@ -121,9 +138,15 @@ namespace _1likte.API.Controllers
             }
         }
 
-
+        // Revoke Token
         [HttpPost("revoke")]
-       [Authorize(Roles ="Admin , User")] 
+        [Authorize(Roles = "Admin, User")]
+        [SwaggerOperation(
+            Summary = "Erişim Token'ını İptal Et",
+            Description = "Bu işlem, verilen refresh token'ı iptal eder.",
+            OperationId = "RevokeToken",
+            Tags = new[] { "Kimlik Doğrulama" }
+        )]
         public async Task<IActionResult> RevokeToken([FromBody] string refreshToken)
         {
             if (string.IsNullOrWhiteSpace(refreshToken))

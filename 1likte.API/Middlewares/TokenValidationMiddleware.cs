@@ -47,8 +47,7 @@ namespace TaskManagementSystemBackend.API.Middlewares
                                 return;
                             }
                         }
-                        var role = jwtToken.Claims.FirstOrDefault(c => c.Type.Substring(c.Type.LastIndexOf("/") + 1) == "role")?.Value;
-
+                       var role = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
 
                         if (role == null)
                         {
@@ -57,7 +56,7 @@ namespace TaskManagementSystemBackend.API.Middlewares
                             return;
                         }
 
-                        var userId = int.Parse(jwtToken.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.NameId)?.Value);
+                        var userId = int.Parse(jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
                         context.Items["UserId"] = userId;
                     }
                 }

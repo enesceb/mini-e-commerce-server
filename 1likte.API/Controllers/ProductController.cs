@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using _1likte.Core.Services;
 using _1likte.Model.DbModels;
 using _1likte.Model.ViewModels.Product;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -23,6 +24,7 @@ namespace _1likte.API.Controllers
 
         // Create Product
         [HttpPost]
+        [Authorize(Roles = "Admin, User")]
         [SwaggerOperation(
             Summary = "Yeni bir ürün oluşturur",
             Description = "Bu işlem, verilen ürün detaylarıyla yeni bir ürün oluşturur. Başarıyla oluşturulan ürünün bilgileri döndürülür.",
@@ -40,6 +42,7 @@ namespace _1likte.API.Controllers
 
         // Get Product by Id
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin, User")]
         [SwaggerOperation(
             Summary = "ID'ye göre ürünü getirir",
             Description = "Bu işlem, verilen ürün ID'sine göre ürünü getirir. Eğer ürün bulunamazsa, 404 Not Found hatası döner.",
@@ -57,6 +60,7 @@ namespace _1likte.API.Controllers
 
         // Get All Products
         [HttpGet]
+        [Authorize(Roles = "Admin, User")]
         [SwaggerOperation(
             Summary = "Tüm ürünleri getirir",
             Description = "Bu işlem, tüm ürünlerin listesini getirir. Eğer ürün bulunmazsa, 404 Not Found hatası dönebilir.",
@@ -71,6 +75,7 @@ namespace _1likte.API.Controllers
 
         // Update Product
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin, User")]
         [SwaggerOperation(
             Summary = "Ürünü günceller",
             Description = "Bu işlem, verilen ürün ID'sine göre ürünü günceller. Eğer ID uyuşmazsa, 400 Bad Request hatası döner.",
@@ -91,6 +96,7 @@ namespace _1likte.API.Controllers
 
         // Delete Product
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin, User")]
         [SwaggerOperation(
             Summary = "Ürünü siler",
             Description = "Bu işlem, verilen ürün ID'sine sahip ürünü siler. Başarıyla silindiyse, 204 No Content döner.",

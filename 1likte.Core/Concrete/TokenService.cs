@@ -36,10 +36,9 @@ namespace _1likte.Core.Concrete
         {
             var claims = new[]
             {
-            new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString()),
-            new Claim(JwtRegisteredClaimNames.Email, user.Email),
-            new Claim(JwtRegisteredClaimNames.Name, user.FullName),
-            new Claim(JwtRegisteredClaimNames.Aud, _tokenOption.Audience[0]),
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim(ClaimTypes.Email, user.Email),
+            new Claim(ClaimTypes.Name, user.FullName),
             new Claim(ClaimTypes.Role, user.Role)
         };
             return claims;

@@ -19,6 +19,7 @@ namespace _1likte.API.Controllers
 
         // Get All Users
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         [SwaggerOperation(
             Summary = "Tüm kullanıcıları getirir",
             Description = "Bu işlem, tüm kullanıcıların listesini getirir. Eğer bir hata oluşursa, hata mesajı ile birlikte bir 500 Internal Server Error döner.",
@@ -40,7 +41,7 @@ namespace _1likte.API.Controllers
 
         // Get User Details by Id
         [HttpGet("{id:int}")]
-        [AllowAnonymous]
+        [Authorize(Roles = "Admin, User")]
         [SwaggerOperation(
             Summary = "Kullanıcı detaylarını getirir",
             Description = "Bu işlem, verilen kullanıcı ID'sine göre kullanıcı detaylarını getirir. Eğer kullanıcı bulunamazsa, 404 Not Found hatası döner.",
@@ -51,6 +52,7 @@ namespace _1likte.API.Controllers
         {
             try
             {
+                if (id == 0 || id < 0) return BadRequest(); 
                 var user = await _userService.GetUserById(id);
                 if (user.Data == null) return NotFound();
                 return Ok(user);
@@ -67,7 +69,7 @@ namespace _1likte.API.Controllers
 
         // Update User
         [HttpPost("update")]
-        [Authorize]
+        [Authorize(Roles = "Admin, User")]
         [SwaggerOperation(
             Summary = "Kullanıcıyı günceller",
             Description = "Bu işlem, kullanıcı bilgilerini günceller. Kullanıcı doğrulaması gereklidir. Eğer bir hata oluşursa, hata mesajı ile birlikte 404 Not Found hatası döner.",
@@ -78,6 +80,7 @@ namespace _1likte.API.Controllers
         {
             try
             {
+                if (user == null) return BadRequest();
                 var updatedUser = await _userService.UpdateUser(user);
                 return Ok(updatedUser);
             }

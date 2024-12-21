@@ -8,6 +8,7 @@ using _1likte.Core.Concrete;
 using _1likte.Data.Configurations;
 using _1likte.Data;
 using _1likte.API.Configurations;
+using _1likte.Core.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,7 +24,7 @@ builder.Services.AddAutoMapper(typeof(MapperProfile));
 
 builder.Services.AddSwaggerGen(options =>
 {
-    options.EnableAnnotations(); 
+    options.EnableAnnotations();
     options.SwaggerDoc("v1", new OpenApiInfo
     {
         Title = "1likte API",
@@ -73,6 +74,7 @@ builder.Services.AddCors(options =>
 });
 
 
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -90,22 +92,25 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidateIssuer = true,
         ValidateLifetime = true,
-        RoleClaimType = "Role"
+        RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
     };
+});
+builder.Services.AddAuthorization(options =>
+{
+    // Role-based authorization
+    options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("UserOnly", policy => policy.RequireRole("User"));
 });
 builder.Services.Configure<CustomTokenOption>(builder.Configuration.GetSection("TokenOption"));
 
 var app = builder.Build();
-
-app.UseMiddleware<TokenValidationMiddleware>();
-
-
-app.UseSwagger();
-app.UseSwaggerUI();
 app.UseHttpsRedirection();
 app.UseCors("CORSPolicy");
-app.MapControllers();
-app.UseAuthentication();
-app.UseAuthorization();
-app.MapControllers().RequireAuthorization();
+app.UseAuthentication();  
+app.UseAuthorization();   
+app.UseMiddleware<TokenValidationMiddleware>();
+app.UseSwagger();           
+app.UseSwaggerUI();
+app.MapControllers();       
 app.Run();
+       

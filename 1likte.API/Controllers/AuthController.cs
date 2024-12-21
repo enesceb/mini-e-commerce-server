@@ -64,6 +64,30 @@ namespace _1likte.API.Controllers
             }
         }
 
+        // User Logout
+        [HttpPost("logout")]
+        [Authorize(Roles = "Admin, User")]
+        [SwaggerOperation(
+            Summary = "Kullanıcı Çıkışı",
+            Description = "Bu işlem, kullanıcının sistemden çıkış yapmasını sağlar. İlgili token ve çerezler temizlenir.",
+            OperationId = "Logout",
+            Tags = new[] { "Kimlik Doğrulama" }
+        )]
+        public IActionResult Logout()
+        {
+            try
+            {
+                // Token çerezini sil
+                HttpContext.Response.Cookies.Delete("access-token");
+
+                return Ok(new { message = "Çıkış işlemi başarılı!" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Bir hata oluştu", details = ex.Message });
+            }
+        }
+
         // User Registration
         [HttpPost("register")]
         [AllowAnonymous]

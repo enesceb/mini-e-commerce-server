@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5064:80" # localhost:5064 üzerinden API'ye erişim
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=localhost,5433;Database=1likte-postgres;Username=myuser;Password=mypass
+    depends_on:
+      - db
+  db:
+    image: postgres:15
+    container_name: postgres_db
+    restart: always
+    ports:
+      - "5433:5433"
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypass
+      POSTGRES_DB: 1likte-postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

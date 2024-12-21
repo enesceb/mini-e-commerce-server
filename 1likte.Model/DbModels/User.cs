@@ -24,5 +24,7 @@ namespace _1likte.Model.DbModels
 
 
             public string ProfilePhotoUrl { get; set; }
+
+             public string Role { get; set; } = "User";
         }
 }

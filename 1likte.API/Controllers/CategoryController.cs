@@ -6,6 +6,9 @@ using _1likte.Core.Services;
 using _1likte.Model.DbModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Swashbuckle.AspNetCore.Annotations;
+
 
 namespace _1likte.API.Controllers
 {
@@ -22,6 +25,7 @@ namespace _1likte.API.Controllers
 
         // Create Category
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateCategory([FromBody] Category category)
         {
             var result = await _categoryService.CreateCategoryAsync(category);
@@ -33,6 +37,7 @@ namespace _1likte.API.Controllers
 
         // Get Category by Id
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetCategoryById(int id)
         {
             var result = await _categoryService.GetCategoryByIdAsync(id);
@@ -44,6 +49,7 @@ namespace _1likte.API.Controllers
 
         // Get All Categories
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAllCategories()
         {
             var result = await _categoryService.GetAllCategoriesAsync();
@@ -52,6 +58,8 @@ namespace _1likte.API.Controllers
 
         // Update Category
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
+        [SwaggerOperation(Summary = "Update Category by ID")]
         public async Task<IActionResult> UpdateCategory(int id, [FromBody] Category category)
         {
             if (id != category.Id)
@@ -66,6 +74,7 @@ namespace _1likte.API.Controllers
 
         // Delete Category
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteCategory(int id)
         {
             var result = await _categoryService.DeleteCategoryAsync(id);

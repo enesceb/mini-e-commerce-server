@@ -12,6 +12,7 @@ namespace _1likte.Model.ViewModels
         public string Email { get; set; }
         public string FullName { get; set; }
         public string ProfilePhotoUrl { get; set; }
+        public string Role { get; set; }
         
         public string AccessToken { get; set; }
         public DateTime AccessTokenExpiration { get; set; }

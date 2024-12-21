@@ -1,4 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using _1likte.Model.DbModels;
 
 namespace TaskManagementSystemBackend.API.Middlewares
 {
@@ -45,6 +47,16 @@ namespace TaskManagementSystemBackend.API.Middlewares
                                 return;
                             }
                         }
+                        var role = jwtToken.Claims.FirstOrDefault(c => c.Type.Substring(c.Type.LastIndexOf("/") + 1) == "role")?.Value;
+
+
+                        if (role == null)
+                        {
+                            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                            await context.Response.WriteAsync("Unauthorized: Role is missing.");
+                            return;
+                        }
+
                         var userId = int.Parse(jwtToken.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.NameId)?.Value);
                         context.Items["UserId"] = userId;
                     }

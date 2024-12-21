@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using TaskManagementSystemBackend.API.Middlewares;
-using _1likte.Core.Services;
 using _1likte.Core.Mapper;
 using _1likte.Core.Concrete;
 using _1likte.Data.Configurations;
@@ -24,12 +23,12 @@ builder.Services.AddAutoMapper(typeof(MapperProfile));
 
 builder.Services.AddSwaggerGen(options =>
 {
+    
     options.SwaggerDoc("v1", new OpenApiInfo
     {
         Title = "1likte API",
         Version = "v1",
     });
-
     // Add JWT Authorization support
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
@@ -73,10 +72,12 @@ builder.Services.AddCors(options =>
         });
 });
 
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
 }).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
 {
     var tokenOptions = builder.Configuration.GetSection("TokenOption").Get<CustomTokenOption>();
@@ -89,6 +90,7 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidateIssuer = true,
         ValidateLifetime = true,
+        RoleClaimType = "Role"
     };
 });
 builder.Services.Configure<CustomTokenOption>(builder.Configuration.GetSection("TokenOption"));
@@ -105,4 +107,5 @@ app.UseCors("CORSPolicy");
 app.MapControllers();
 app.UseAuthentication();
 app.UseAuthorization();
+app.MapControllers().RequireAuthorization();
 app.Run();

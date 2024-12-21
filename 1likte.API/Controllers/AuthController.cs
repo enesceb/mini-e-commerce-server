@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using _1likte.Core.Services;
 using _1likte.Model.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace _1likte.API.Controllers
@@ -20,6 +21,7 @@ namespace _1likte.API.Controllers
         }
 
         [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] UserLoginRequestModel loginDto)
         {
             if (!ModelState.IsValid)
@@ -36,7 +38,7 @@ namespace _1likte.API.Controllers
                 });
 
                 HttpContext.Response.Headers["X-Access-Token"] = response.AccessToken;
-              
+
                 return Ok(new
                 {
                     Message = "Giriş başarılı!",
@@ -57,6 +59,8 @@ namespace _1likte.API.Controllers
         }
 
         [HttpPost("register")]
+        [AllowAnonymous]
+
         public async Task<IActionResult> Register([FromBody] UserRegisterRequestModel createUserDto)
         {
             if (!ModelState.IsValid)
@@ -64,7 +68,7 @@ namespace _1likte.API.Controllers
             try
             {
                 var response = await _authService.RegisterAsync(createUserDto);
-                 HttpContext.Response.Cookies.Append("access-token", response.AccessToken, new CookieOptions
+                HttpContext.Response.Cookies.Append("access-token", response.AccessToken, new CookieOptions
                 {
                     HttpOnly = true,
                     Secure = true,
@@ -96,6 +100,7 @@ namespace _1likte.API.Controllers
         }
 
         [HttpPost("refresh")]
+       [Authorize(Roles ="Admin , User")] 
         public async Task<IActionResult> RefreshToken([FromBody] string refreshToken)
         {
             if (string.IsNullOrWhiteSpace(refreshToken))
@@ -116,7 +121,9 @@ namespace _1likte.API.Controllers
             }
         }
 
+
         [HttpPost("revoke")]
+       [Authorize(Roles ="Admin , User")] 
         public async Task<IActionResult> RevokeToken([FromBody] string refreshToken)
         {
             if (string.IsNullOrWhiteSpace(refreshToken))

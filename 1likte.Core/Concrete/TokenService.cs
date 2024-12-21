@@ -40,6 +40,7 @@ namespace _1likte.Core.Concrete
             new Claim(JwtRegisteredClaimNames.Email, user.Email),
             new Claim(JwtRegisteredClaimNames.Name, user.FullName),
             new Claim(JwtRegisteredClaimNames.Aud, _tokenOption.Audience[0]),
+            new Claim(ClaimTypes.Role, user.Role)
         };
             return claims;
         }
